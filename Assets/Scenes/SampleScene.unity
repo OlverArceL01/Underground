@@ -838,16 +838,48 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: maxGrip
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: massInKg
-      value: 400
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: maxTorque
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: turnSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: wheelGrip
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: wheelSize
       value: 0.53
       objectReference: {fileID: 0}
     - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: dampAmount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: frictionCoWheel
+      value: 0.022
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: suspensionForce
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: wheels.Array.size
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: suspensionForceClamp
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: wheels.Array.data[0].turnAngle
@@ -939,7 +971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7812968263890829931, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.7
+      value: -13.7
       objectReference: {fileID: 0}
     - target: {fileID: 7812968263890829931, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: m_LocalPosition.z

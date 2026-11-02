@@ -60,6 +60,8 @@ public class car : MonoBehaviour
 
         // Slight tweak to inertia if desired
         rb.inertiaTensor = 1.0f * rb.inertiaTensor;
+ 
+        rb.centerOfMass = new Vector3(0f, -0.25f, 0f);
 
         // Create each wheel
         if (wheels != null)

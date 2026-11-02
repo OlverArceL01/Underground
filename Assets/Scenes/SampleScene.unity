@@ -850,6 +850,14 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: wheels.Array.data[0].turnAngle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: wheels.Array.data[1].turnAngle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: wheels.Array.data[4].wheelState
       value: 1
       objectReference: {fileID: 0}
@@ -931,7 +939,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7812968263890829931, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.3
+      value: -14.87
       objectReference: {fileID: 0}
     - target: {fileID: 7812968263890829931, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: m_LocalPosition.z

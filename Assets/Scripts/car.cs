@@ -48,6 +48,10 @@ public class car : MonoBehaviour
 
     private Rigidbody rb;
 
+    [Header("Differential Steering")]
+    public float turnSpeed = 1.5f;
+    public float minTurnSpeed = 0.25f;
+
     void Start()
     {
         // Grab or add a Rigidbody
@@ -89,127 +93,136 @@ public class car : MonoBehaviour
         // input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
-    void FixedUpdate()
+void FixedUpdate()
+{
+    if (wheels == null || wheels.Length == 0) return;
+
+    foreach (var wheel in wheels)
     {
-        if (wheels == null || wheels.Length == 0) return;
+        if (!wheel.wheelObject) continue;
 
-        foreach (var wheel in wheels)
+        Transform wheelObj = wheel.wheelObject.transform;
+        Transform wheelVisual = wheelObj.GetChild(0);
+
+        // DIFFERENTIAL STEERING
+        float steering = Mathf.Clamp(input.x, -1f, 1f);
+        float throttle = Mathf.Clamp(input.y, -1f, 1f);
+
+        // X < 0 = left, X > 0 = right
+        float side = Mathf.Sign(wheel.localPosition.x);
+
+        // Opposite speed adjustment on each side
+        float differential = -steering * side * turnSpeed;
+        
+        float wheelSpeed = throttle + differential;
+        wheelSpeed = Mathf.Clamp(wheelSpeed, -1f, 1f);
+
+        wheel.torque = wheelSpeed * maxTorque / massInKg;
+
+        // Determine world position and velocity
+        wheel.wheelWorldPosition = transform.TransformPoint(wheel.localPosition);
+
+        Vector3 velocityAtWheel =
+            rb.GetPointVelocity(wheel.wheelWorldPosition);
+
+        // Local velocity
+        wheel.localVelocity =
+            wheelObj.InverseTransformDirection(velocityAtWheel);
+
+        // ROLLING FRICTION
+        float rollingFrictionForce =
+            -frictionCoWheel * wheel.localVelocity.z;
+
+        // LATERAL FRICTION
+        float lateralFriction =
+            -wheelGrip * wheel.localVelocity.x;
+
+        lateralFriction = Mathf.Clamp(
+            lateralFriction,
+            -maxGrip,
+            maxGrip
+        );
+
+        // ENGINE FORCE
+        float engineForce = wheel.torque / wheelSize;
+
+        Vector3 totalLocalForce = new Vector3(
+            lateralFriction,
+            0f,
+            rollingFrictionForce + engineForce
+        );
+
+        wheel.localSlipDirection = totalLocalForce;
+
+        Vector3 totalWorldForce =
+            wheelObj.TransformDirection(totalLocalForce);
+
+        wheel.worldSlipDirection = totalWorldForce;
+
+        Forwards = wheel.localVelocity.z > 0f;
+
+        // SUSPENSION
+        RaycastHit hit;
+
+        if (Physics.Raycast(
+            wheel.wheelWorldPosition,
+            -transform.up,
+            out hit,
+            wheelSize * 2f))
         {
-            if (!wheel.wheelObject) continue;
+            float rayLen = wheelSize * 2f;
 
-            // For easy reference
-            Transform wheelObj     = wheel.wheelObject.transform;
-            Transform wheelVisual  = wheelObj.GetChild(0);  // the mesh is presumably a child
+            float compression = rayLen - hit.distance;
 
-            // Calculate steer angle if wheelState == 1
-            if (wheel.wheelState == 1)
-            {
-                float targetAngle = wheel.turnAngle * input.x; // left/right
-                Quaternion targetRot = Quaternion.Euler(0, targetAngle, 0);
-                // Lerp to the new steer angle
-                wheelObj.localRotation = Quaternion.Lerp(
-                    wheelObj.localRotation,
-                    targetRot,
-                    Time.fixedDeltaTime * 100f
-                );
-            }
-            else if (wheel.wheelState == 0 && rb.linearVelocity.magnitude > 0.04f)
-            {
-                // For free wheels, optionally align them in direction of motion
-                RaycastHit tmpHit;
-                if (Physics.Raycast(transform.TransformPoint(wheel.localPosition), 
-                                    -transform.up, 
-                                    out tmpHit, 
-                                    wheelSize * 2f))
-                {
-                    Quaternion aim = Quaternion.LookRotation(rb.GetPointVelocity(tmpHit.point), transform.up);
-                    wheelObj.rotation = Quaternion.Lerp(wheelObj.rotation, aim, Time.fixedDeltaTime * 100f);
-                }
-            }
+            float damping =
+                (wheel.lastSuspensionLength - hit.distance) * dampAmount;
 
-            // Determine the world position of this wheel and velocity at that point
-            wheel.wheelWorldPosition = transform.TransformPoint(wheel.localPosition);
-            Vector3 velocityAtWheel   = rb.GetPointVelocity(wheel.wheelWorldPosition);
+            float springForce =
+                (compression + damping) * suspensionForce;
 
-            // KEY FIX: Get local velocity in the wheel's *actual* orientation
-            // so we do not have to manually rotate by turnAngle again
-            wheel.localVelocity = wheelObj.InverseTransformDirection(velocityAtWheel);
-
-            // ENGINE + friction in the wheel's local Z axis
-            // "wheel.torque" can be something like (vertical input * maxTorque), etc.
-            // Adjust or clamp as needed:
-            wheel.torque = Mathf.Clamp(input.y, -1f, 1f) * maxTorque / massInKg;
-
-            // Rolling friction
-            float rollingFrictionForce = -frictionCoWheel * wheel.localVelocity.z;
-
-            // Lateral friction tries to cancel sideways slip
-            float lateralFriction = -wheelGrip * wheel.localVelocity.x;
-            lateralFriction = Mathf.Clamp(lateralFriction, -maxGrip, maxGrip);
-
-            // Engine force (F = torque / radius)
-            float engineForce = wheel.torque / wheelSize;
-
-            // Combine them in local space
-            Vector3 totalLocalForce = new Vector3(
-                lateralFriction,
+            springForce = Mathf.Clamp(
+                springForce,
                 0f,
-                rollingFrictionForce + engineForce
+                suspensionForceClamp
             );
 
-            wheel.localSlipDirection = totalLocalForce;
+            Vector3 springDir = hit.normal * springForce;
 
-            // Transform to world space
-            Vector3 totalWorldForce = wheelObj.TransformDirection(totalLocalForce);
-            wheel.worldSlipDirection = totalWorldForce;
+            wheel.suspensionForceDirection = springDir;
 
-            // Check if the wheel is moving forward in its own local frame
-            Forwards = (wheel.localVelocity.z > 0f);
+            rb.AddForceAtPosition(
+                springDir + totalWorldForce,
+                hit.point
+            );
 
-            // SUSPENSION (spring + damper)
-            RaycastHit hit;
-            if (Physics.Raycast(wheel.wheelWorldPosition, -transform.up, out hit, wheelSize * 2f))
-            {
-                // how much the spring is compressed
-                float rayLen        = wheelSize * 2f;
-                float compression   = rayLen - hit.distance; 
-                // damping is difference from last frame
-                float damping       = (wheel.lastSuspensionLength - hit.distance) * dampAmount;
-                float springForce   = (compression + damping) * suspensionForce;
+            // Keep wheel visible and positioned at suspension contact
+            wheelObj.position = hit.point + transform.up * wheelSize;
 
-                // clamp it
-                springForce = Mathf.Clamp(springForce, 0f, suspensionForceClamp);
-
-                // direction is the surface normal
-                Vector3 springDir   = hit.normal * springForce;
-                wheel.suspensionForceDirection = springDir;
-
-                // Apply total forces at contact
-                rb.AddForceAtPosition(springDir + totalWorldForce, hit.point);
-
-                // Move wheel visuals to the contact point + offset
-                wheelObj.position = hit.point + transform.up * wheelSize;
-
-                // store for damping next frame
-                wheel.lastSuspensionLength = hit.distance;
-            }
-            else
-            {
-                // If not hitting anything, just position the wheel under the local anchor
-                wheelObj.position = wheel.wheelWorldPosition - transform.up * wheelSize;
-            }
-
-            // --- ROLL the wheel visually like in the original code ---
-            // We'll get the forward speed in the wheelObj's local space:
-            Vector3 forwardInWheelSpace = wheelObj.InverseTransformDirection(rb.GetPointVelocity(wheel.wheelWorldPosition));
-
-            // Convert that local Z speed into a rotation about X
-            float wheelRotationSpeed = forwardInWheelSpace.z * 360f / wheel.wheelCircumference;
-
-            // Rotate the visual child
-            wheelVisual.Rotate(Vector3.right, wheelRotationSpeed * Time.fixedDeltaTime, Space.Self);
+            wheel.lastSuspensionLength = hit.distance;
         }
+        else
+        {
+            wheelObj.position =
+                wheel.wheelWorldPosition - transform.up * wheelSize;
+        }
+
+        // VISUAL WHEEL ROTATION
+        Vector3 forwardInWheelSpace =
+            wheelObj.InverseTransformDirection(
+                rb.GetPointVelocity(wheel.wheelWorldPosition)
+            );
+
+        float wheelRotationSpeed =
+            forwardInWheelSpace.z * 360f / wheel.wheelCircumference;
+
+        wheelVisual.Rotate(
+            Vector3.right,
+            wheelRotationSpeed * Time.fixedDeltaTime,
+            Space.Self
+        );
     }
+}
+
 
     void OnDrawGizmos()
     {

@@ -3,7 +3,52 @@ guid: 7ac46c7219ea4494f9c14330f0b7746d
 ModelImporter:
   serializedVersion: 24600
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: d59b4063cae5c484b9aaadf4053d7616, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Textures 1
+    second: {fileID: 2100000, guid: 7a19df6f1ac4a7343829d16625dc9b57, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Textures 2
+    second: {fileID: 2100000, guid: f65cb4004e7a4bc4ba92d29dff746651, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Textures 4
+    second: {fileID: 2100000, guid: 9d9ede00ea85d7045872cfa644fce41b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Textures. Engineer
+    second: {fileID: 2100000, guid: a8c4d63a32cd719498a1e50f351cbd9c, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Textures 1
+    second: {fileID: 2800000, guid: 359134b3018680940a1cabc1e012c140, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Textures 2
+    second: {fileID: 2800000, guid: 1f6d9cf3115a2364194457c4b414996d, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Textures 4
+    second: {fileID: 2800000, guid: f55897b0d58093f4ea00bd2436cd1765, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Textures Engineer
+    second: {fileID: 2800000, guid: 47b9b1dc86cd0644ebf51dc9e926845b, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -40,7 +85,7 @@ ModelImporter:
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     preBakeConvexCollisionMesh: 0
-    preBakeTriangleCollisionMesh: 0
+    preBakeTriangleCollisionMesh: 1
     importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1

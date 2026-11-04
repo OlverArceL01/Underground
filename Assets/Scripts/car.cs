@@ -48,6 +48,7 @@ public class car : MonoBehaviour
 
     private Rigidbody rb;
     public Vector3 Velocity => rb.linearVelocity;
+    public Vector3 AngularVelocity => rb.angularVelocity;
 
     [Header("Differential Steering")]
     public float turnSpeed = 1.5f;

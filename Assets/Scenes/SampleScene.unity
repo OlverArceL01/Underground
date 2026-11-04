@@ -1315,7 +1315,6 @@ GameObject:
   m_Component:
   - component: {fileID: 330585546}
   - component: {fileID: 330585545}
-  - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   m_Layer: 0
   m_Name: Main Camera
@@ -1324,14 +1323,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &330585544
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
 --- !u!20 &330585545
 Camera:
   m_ObjectHideFlags: 0
@@ -1827,7 +1818,6 @@ GameObject:
   m_Component:
   - component: {fileID: 419491231}
   - component: {fileID: 419491230}
-  - component: {fileID: 419491229}
   - component: {fileID: 419491228}
   - component: {fileID: 419491232}
   m_Layer: 0
@@ -1881,14 +1871,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!81 &419491229
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 419491227}
-  m_Enabled: 1
 --- !u!20 &419491230
 Camera:
   m_ObjectHideFlags: 0
@@ -3444,6 +3426,85 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f778b548109986d4f9c62eb7f5a2b14b, type: 3}
+--- !u!1 &856023356 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5355010901233390585, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+  m_PrefabInstance: {fileID: 883002985482058847}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &856023361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856023356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b772a9ce800986b48b3d8e18fbf8d037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MineRobotAgent
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  carController: {fileID: 856023363}
+--- !u!114 &856023362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856023356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
+  m_BrainParameters:
+    VectorObservationSize: 2
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 2
+      BranchSizes: 
+    VectorActionSize: 02000000i
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 1
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 1
+  m_BehaviorName: MineRobot
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
+--- !u!114 &856023363 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+  m_PrefabInstance: {fileID: 883002985482058847}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856023356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ecfa9cbacb42c4ba2fa5bb17798115, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!114 &856023367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856023356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.DecisionRequester
+  DecisionPeriod: 1
+  DecisionStep: 0
+  TakeActionsBetweenDecisions: 1
 --- !u!4 &857326685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1673467226061076199, guid: f778b548109986d4f9c62eb7f5a2b14b, type: 3}
@@ -7841,6 +7902,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      propertyPath: usePlayerInput
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6352425435330619622, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       propertyPath: frictionCoWheel
       value: 0.022
       objectReference: {fileID: 0}
@@ -7992,7 +8057,16 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7812968263890829931, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1709464753}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5355010901233390585, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 856023362}
+    - targetCorrespondingSourceObject: {fileID: 5355010901233390585, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 856023361}
+    - targetCorrespondingSourceObject: {fileID: 5355010901233390585, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 856023367}
   m_SourcePrefab: {fileID: 100100000, guid: 006ba624df14a2f4e9672882d50f7a17, type: 3}
 --- !u!1001 &1397391454836815495
 PrefabInstance:

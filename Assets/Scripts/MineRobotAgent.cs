@@ -8,56 +8,79 @@ public class MineRobotAgent : Agent
 {
     [Header("References")]
     public car carController;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
 
     public override void Initialize()
     {
         if (carController == null)
             carController = GetComponent<car>();
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
     }
 
     public override void OnEpisodeBegin()
     {
         carController.SetAgentInput(0f, 0f);
-        Debug.Log("ON EPISODE BEGIN");
+        carController.ResetVelocity();
+        transform.SetPositionAndRotation(initialPosition, initialRotation);
     }
 
-    public override void CollectObservations(
-        VectorSensor sensor)
+    public override void CollectObservations(VectorSensor sensor)
     {
-        Vector3 velocity =
-            carController.GetComponent<Rigidbody>()
-            .transform.InverseTransformDirection(
-                carController.GetComponent<Rigidbody>().linearVelocity
-            );
-
+        Vector3 velocity = transform.InverseTransformDirection(carController.Velocity);
         sensor.AddObservation(velocity.x);
         sensor.AddObservation(velocity.z);
-
-        Debug.Log("COLLECT OBSERVATIONS");
+        CollectRaycasts(sensor);
     }
 
-    public override void OnActionReceived(
-        ActionBuffers actions)
+    private void CollectRaycasts(VectorSensor sensor)
     {
-        float steering =
-            actions.ContinuousActions[0];
-        float throttle =
-            actions.ContinuousActions[1];
-        carController.SetAgentInput(steering, throttle);
+        foreach (Transform ray in carController.sensors)
+        {
+            bool hit = Physics.Raycast(
+                ray.position,
+                ray.forward,
+                out RaycastHit hitInfo,
+                carController.rayDistance,
+                carController.obstacleMask
+            );
 
-        Debug.Log("ON ACTION RECEIVED");
+            float distance = hit
+                ? hitInfo.distance / carController.rayDistance
+                : 1f;
+
+            sensor.AddObservation(distance);
+        }
+    }
+
+
+    public override void OnActionReceived(ActionBuffers actions)
+    {
+        float steering = actions.ContinuousActions[0];
+        float throttle = actions.ContinuousActions[1];
+        carController.SetAgentInput(steering, throttle);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var actions = actionsOut.ContinuousActions;
-
         Vector2 movement = UnityEngine.InputSystem.InputSystem
                 .actions["Move"].ReadValue<Vector2>();
-
         actions[0] = movement.x;
         actions[1] = movement.y;
+    }
 
-        Debug.Log("HEURISTIC");
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(
+            collision.gameObject.CompareTag("Machinery") ||
+            collision.gameObject.CompareTag("Workers") ||
+            collision.gameObject.CompareTag("Rocks")
+        )
+        {
+            AddReward(-10f);
+            EndEpisode();
+        }
     }
 }

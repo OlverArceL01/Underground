@@ -47,6 +47,7 @@ public class car : MonoBehaviour
     [HideInInspector] public bool Forwards = false;
 
     private Rigidbody rb;
+    public Vector3 Velocity => rb.linearVelocity;
 
     [Header("Differential Steering")]
     public float turnSpeed = 1.5f;
@@ -55,6 +56,11 @@ public class car : MonoBehaviour
     [Header("Control")]
     public bool usePlayerInput = true;
 
+    [Header("Raycast Sensors")]
+    public float rayDistance = 10f;
+    public LayerMask obstacleMask;
+    public Transform[] sensors;
+    
     void Start()
     {
         // Grab or add a Rigidbody
@@ -97,6 +103,14 @@ public class car : MonoBehaviour
         if (usePlayerInput)
         {
             input = InputSystem.actions["Move"].ReadValue<Vector2>();
+        }
+        foreach (Transform ray in sensors)
+        {
+            Debug.DrawRay(
+                ray.position,
+                ray.forward * rayDistance,
+                Color.green
+            );
         }
     }
 
@@ -230,14 +244,18 @@ public class car : MonoBehaviour
         }
     }
 
+    public void ResetVelocity()
+    {
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
     public void SetAgentInput(float steering, float throttle)
     {
         input = new Vector2(
             Mathf.Clamp(steering, -1f, 1f),
             Mathf.Clamp(throttle, -1f, 1f)
         );
-
-        Debug.Log($"SetAgentInput, Steering: {input.x:F2} | Throttle: {input.y:F2}");
     }
 
     void OnDrawGizmos()

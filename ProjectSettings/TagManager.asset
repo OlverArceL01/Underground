@@ -3,18 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - Machinery
-  - Workers
-  - Rocks
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Obstacles
+  - Obstacle
   - Water
   - UI
-  - 
+  - Mine
   - 
   - 
   - 

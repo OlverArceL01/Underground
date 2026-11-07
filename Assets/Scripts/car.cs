@@ -58,8 +58,7 @@ public class car : MonoBehaviour
     public bool usePlayerInput = true;
 
     [Header("Raycast Sensors")]
-    public float rayDistance = 10f;
-    public LayerMask obstacleMask;
+    public float rayDistance = 30f;
     public Transform[] sensors;
     
     void Start()
@@ -107,10 +106,17 @@ public class car : MonoBehaviour
         }
         foreach (Transform ray in sensors)
         {
+            bool hit = Physics.Raycast(
+                ray.position,
+                ray.forward,
+                out RaycastHit hitInfo,
+                rayDistance
+            );
+
             Debug.DrawRay(
                 ray.position,
-                ray.forward * rayDistance,
-                Color.green
+                ray.forward * (hit ? hitInfo.distance : rayDistance),
+                hit ? Color.red : Color.green
             );
         }
     }

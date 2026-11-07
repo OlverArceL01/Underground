@@ -65,8 +65,12 @@ PrefabInstance:
       value: tripo_convert_39970add-1bc3-4fb7-a24d-d6763bb63374
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: fe4829a7b6121174aa38a63c7666bb23, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fe4829a7b6121174aa38a63c7666bb23, type: 3}
       propertyPath: m_TagString
-      value: Workers
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

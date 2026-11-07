@@ -1,0 +1,38 @@
+{
+    "MineRobot": {
+        "checkpoints": [
+            {
+                "steps": 499970,
+                "file_path": "results/underground_01/MineRobot/MineRobot-499970.onnx",
+                "reward": null,
+                "creation_time": 1794064258.423449,
+                "auxillary_file_paths": [
+                    "results/underground_01/MineRobot/MineRobot-499970.pt"
+                ]
+            },
+            {
+                "steps": 500034,
+                "file_path": "results/underground_01/MineRobot/MineRobot-500034.onnx",
+                "reward": null,
+                "creation_time": 1794064258.4594984,
+                "auxillary_file_paths": [
+                    "results/underground_01/MineRobot/MineRobot-500034.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500034,
+            "file_path": "results/underground_01/MineRobot.onnx",
+            "reward": null,
+            "creation_time": 1794064258.4594984,
+            "auxillary_file_paths": [
+                "results/underground_01/MineRobot/MineRobot-500034.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.8.0+cpu"
+    }
+}
